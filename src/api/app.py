@@ -14,6 +14,9 @@ model=joblib.load(model_path)
 encoders_path=MODELS_DIR/'label_encoders.joblib'
 label_encoders = joblib.load(encoders_path)
 
+scaler_path=MODELS_DIR/'scaler.joblib'
+scaler=joblib.load(scaler_path)
+
 app=FastAPI(title='Car Price Prediction API', version='1.0.0')
 
 class CarFeatures(BaseModel):
@@ -64,8 +67,10 @@ def predict_price(features:CarFeatures):
             
         ]])
         
+        #Scale the features before prediction
+        input_features_scaled = scaler.transform(input_features)
         
-        prediction=model.predict(input_features)
+        prediction=model.predict(input_features_scaled)
         
         
         return{

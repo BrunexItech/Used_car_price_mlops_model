@@ -1,0 +1,15 @@
+artifact_uri: file:///home/bruno-sharrix/Downloads/car_price_mlops/mlruns/394591180614760325/374ae90a249d4d9e8c425ad6a475f07e/artifacts
+end_time: 1762449021827
+entry_point_name: ''
+experiment_id: '394591180614760325'
+lifecycle_stage: active
+run_id: 374ae90a249d4d9e8c425ad6a475f07e
+run_name: model_comparison
+run_uuid: 374ae90a249d4d9e8c425ad6a475f07e
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1762449021723
+status: 3
+tags: []
+user_id: bruno-sharrix

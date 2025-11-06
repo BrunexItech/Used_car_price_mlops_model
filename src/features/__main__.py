@@ -20,11 +20,16 @@ def main():
 
 
 #add function to save encoders
-def save_encoders(engineer, filename='label_encoders.joblib'):
-    '''Save label encoders to file'''
-    encoders_path = MODELS_DIR/filename
+def save_encoders_and_scaler(engineer, encoders_filename='label_encoders.joblib',scaler_filename='scaler.joblib'):
+    '''Save label encoders and scaler to file'''
+    encoders_path = MODELS_DIR/encoders_filename
     joblib.dump(engineer.label_encoders, encoders_path)
     print(f'Label encoders saved to {encoders_path}')
+    
+    
+    scaler_path=MODELS_DIR/scaler_filename
+    joblib.dump(engineer.scaler, scaler_path)
+    print(f"Scaler saved to {scaler_path}")
 
 
 if __name__=='__main__':
