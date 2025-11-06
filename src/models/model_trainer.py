@@ -4,7 +4,7 @@ from sklearn.metrics import r2_score,mean_squared_error
 import joblib 
 import numpy as np
 from ..config import MODELS_DIR
-
+from ..training.experiment_tracker import ExperimentTracker
 
 
 class ModelTrainer:
@@ -17,6 +17,12 @@ class ModelTrainer:
         
     def train_models(self,X_train,y_train):
         '''Train multiple linear models and compare performance'''
+        
+        
+        #Initialize MLflow tracker
+        tracker=ExperimentTracker()
+        tracker.start_run('model_comparison')
+        
         linear_models={
             'Linear Regression':LinearRegression(),
             'Ridge':Ridge(alpha=1.0),
@@ -24,6 +30,15 @@ class ModelTrainer:
             'ElasticNet':ElasticNet(alpha=1.0, l1_ratio=0.5)
             
         }
+        
+        
+        #Log parameters
+        tracker.log_params({
+            'cv_folds':5,
+            'scoring':'r2',
+            'models_tested':list(linear_models.keys())
+        })
+        
         #Evaluating models using cross-val-score
         for name, model in linear_models.items():
             scores=cross_val_score(model,X_train,y_train,cv=5, scoring='r2')
@@ -36,11 +51,20 @@ class ModelTrainer:
             print(f'{name}:R²={mean_score:.4f} ')
             
             
+            #Log each model's performance
+            tracker.log_metrics({f'{name}_cv_r2':mean_score})
+            
+            
+            
             #Track the best model
             if mean_score > self.best_score:
                 self.best_score = mean_score
                 self.best_model_name=name
                 self.best_model = model
+                
+        tracker.log_metrics({'best_model_cv_r2':self.best_score})
+        tracker.log_params({'best_model':self.best_model_name})
+        tracker.end_run()
     
         print(f'Best model:{self.best_model_name} with R²: {self.best_score:.4f} ')
         return self.models
