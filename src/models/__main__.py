@@ -1,5 +1,9 @@
 from .model_trainer import ModelTrainer
 from src.features.__main__ import main as feature_pipeline
+from monitoring.drift_detector import DriftDetector
+from src.data.__main__ import main as data_pipeline
+import joblib
+
 
 def main():
     '''Main function to run model training pipeline'''
@@ -7,6 +11,20 @@ def main():
     
     #Get features from feature pipeline
     X_train_scaled,X_test_scaled,y_train,y_test,engineer = feature_pipeline()
+    
+    
+    #DRIFT DETECTOR
+    #Save reference data for drift detection
+    drift_detector=DriftDetector()
+    
+    #Get the encoded data before scaling for drift detection
+    clean_data = data_pipeline()
+    encoded_data = engineer.encode_categorical(clean_data)
+    drift_detector.set_reference_data(encoded_data)
+    
+    #save drift detector 
+    joblib.dump(drift_detector, 'models/drift_detector.joblib')
+    print('Drift detector saved with reference data')
     
     
     #Training and evaluating models
