@@ -12,3 +12,4 @@ great-expectations==0.17.4
 joblib==1.2.0
 python-multipart==0.0.6
 evidently==0.4.12
+schedule==1.2.0
