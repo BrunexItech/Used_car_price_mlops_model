@@ -115,4 +115,7 @@ class ModelTrainer:
         model_path=MODELS_DIR/filename
         joblib.dump(self.final_model,model_path)
         print(f'Final model saved to {model_path}')
+        
+        #Save label encoders if they exist
+        encoders_path=MODELS_DIR/'label_encoders.joblib'
     

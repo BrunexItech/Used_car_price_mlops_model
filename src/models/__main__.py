@@ -29,6 +29,8 @@ def main():
     
     #Save the model
     trainer.save_model()
+    from src.features.__main__ import save_encoders
+    save_encoders(engineer)
     
     
     print('Model training pipeline completed successfully')
